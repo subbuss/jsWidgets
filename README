@@ -63,3 +63,6 @@ I am yet to write up a spec for this format, but till such time, some preliminar
   - '$' provides you access to the data object that is currently being processed.  
   - '$util' provides you access to helpers defined within the javascript engine.  
   - This engine can be extended with say '$extern' to let you access arbitrary javascript code, if necessary.
+
+* You can combine multiple distinct formats and consume multiple data streams within the same widget easily
+  See formats/mashup.json for an example of this and jsw.demo.html for how it is used there.

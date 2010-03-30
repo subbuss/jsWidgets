@@ -24,83 +24,83 @@ function _GLOB_iterateOverArray(a, f) { var l = a.length; for (var i = 0; i < l;
 // Widget constructor!
 function _Widget(widgetFormat)
 {
-	this.wf = widgetFormat;
-	this.baseUrl = widgetFormat.base_url;
-	this.rootDIV = '';
-	this.init();
+  this.wf = widgetFormat;
+  this.baseUrl = widgetFormat.base_url;
+  this.rootDIV = '';
+  this.init();
   if (!_GLOB_isDefined(this.baseUrl)) this.baseUrl = '';
 }
 
 _Widget.prototype = {
-	init: function() {
-			var widget  = this;										// COMPRESSION
-			var widgetFormat = widget.wf; 				      // COMPRESSION
-			var cssPrefs = widgetFormat.base_css_prefs;	// COMPRESSION
+  init: function() {
+      var widget  = this;                    // COMPRESSION
+      var widgetFormat = widget.wf;               // COMPRESSION
+      var cssPrefs = widgetFormat.base_css_prefs;  // COMPRESSION
 
-				// some shortcuts
-			widget.hoverStyle = (cssPrefs.link_class || !_GLOB_isDefined(cssPrefs.link_hover_style)) ? '' : cssPrefs.link_hover_style;
-		},
+        // some shortcuts
+      widget.hoverStyle = (cssPrefs.link_class || !_GLOB_isDefined(cssPrefs.link_hover_style)) ? '' : cssPrefs.link_hover_style;
+    },
 
-		// Set a style on a DOM element
-	_PRIV_setStyle: function(elt, clazz, styleText) {
-			var widget = this;									      // COMPRESSION
-			var cssPrefs = widget.wf.base_css_prefs;	// COMPRESSION
+    // Set a style on a DOM element
+  _PRIV_setStyle: function(elt, clazz, styleText) {
+      var widget = this;                        // COMPRESSION
+      var cssPrefs = widget.wf.base_css_prefs;  // COMPRESSION
 
-			if (clazz) {
-				elt.setAttribute((document.all ? 'className' : 'class'), clazz);  // IE7 behavior is different from the rest of the pack!
-			}
-			else if (styleText) {
-					 // this is for IE7 and not sure which other browsers
-				if (elt.style.setAttribute) {
-					elt.style.setAttribute('cssText', styleText);
+      if (clazz) {
+        elt.setAttribute((document.all ? 'className' : 'class'), clazz);  // IE7 behavior is different from the rest of the pack!
+      }
+      else if (styleText) {
+           // this is for IE7 and not sure which other browsers
+        if (elt.style.setAttribute) {
+          elt.style.setAttribute('cssText', styleText);
 
-						 // If a hover style is present, mimic it with onmouseover & onmouseout js handlers
-					if ((elt.tagName == 'A') && widget.hoverStyle) {
-						elt.onmouseover = function() { this.style.setAttribute('cssText', styleText + ';' + widget.hoverStyle); }
-						elt.onmouseout  = function() { this.style.setAttribute('cssText', styleText); }
-					}
-				}
-					 // this is for FF, Safari, and not sure which other browsers
-				else {
-					elt.setAttribute('style', styleText); 
+             // If a hover style is present, mimic it with onmouseover & onmouseout js handlers
+          if ((elt.tagName == 'A') && widget.hoverStyle) {
+            elt.onmouseover = function() { this.style.setAttribute('cssText', styleText + ';' + widget.hoverStyle); }
+            elt.onmouseout  = function() { this.style.setAttribute('cssText', styleText); }
+          }
+        }
+           // this is for FF, Safari, and not sure which other browsers
+        else {
+          elt.setAttribute('style', styleText); 
 
-						 // If a hover style is present, mimic it with onmouseover & onmouseout js handlers
-					if ((elt.tagName == 'A') && widget.hoverStyle) {
-						elt.onmouseover = function() { this.setAttribute('style', styleText + ';' + widget.hoverStyle); }
-						elt.onmouseout  = function() { this.setAttribute('style', styleText); }
-					}
-				}
-			}
-				// if the element is an anchor element, retry with the generic style!
-			else if ((elt.tagName == 'A') && (cssPrefs.link_style || cssPrefs.link_class)) {
-				widget._PRIV_setStyle(elt, cssPrefs.link_class, cssPrefs.link_style);
-			}
-		},
+             // If a hover style is present, mimic it with onmouseover & onmouseout js handlers
+          if ((elt.tagName == 'A') && widget.hoverStyle) {
+            elt.onmouseover = function() { this.setAttribute('style', styleText + ';' + widget.hoverStyle); }
+            elt.onmouseout  = function() { this.setAttribute('style', styleText); }
+          }
+        }
+      }
+        // if the element is an anchor element, retry with the generic style!
+      else if ((elt.tagName == 'A') && (cssPrefs.link_style || cssPrefs.link_class)) {
+        widget._PRIV_setStyle(elt, cssPrefs.link_class, cssPrefs.link_style);
+      }
+    },
 
   _PRIV_createElement: function(type, clazz, style) {
-			var elt = document.createElement(type);
-			this._PRIV_setStyle(elt, clazz, style);
-			return elt;
-		},
+      var elt = document.createElement(type);
+      this._PRIV_setStyle(elt, clazz, style);
+      return elt;
+    },
 
-	_PRIV_computeExpr: function(str, dataObj) {
+  _PRIV_computeExpr: function(str, dataObj) {
       function fetchExprValue(w, d, vRef) {
         return eval(vRef.substring(1, vRef.length-1).replace(/\$util\./g, "w.helpers.").replace(/\$/g, "d")); 
       }
 
       var widget       = this;
       var widgetFormat = this.wf;
-			var refs = str.match(/\{.*?\}/g);
-			if (refs)
-				_GLOB_iterateOverArray(refs, function(arrayElt) { str = str.replace(arrayElt, fetchExprValue(widget, dataObj, arrayElt)); });
+      var refs = str.match(/\{.*?\}/g);
+      if (refs)
+        _GLOB_iterateOverArray(refs, function(arrayElt) { str = str.replace(arrayElt, fetchExprValue(widget, dataObj, arrayElt)); });
 
-			return str;
-		},
+      return str;
+    },
 
   _PRIV_processNewDOMElement: function(dataObj, eltData, eltParams, newDOMElt, newDOMEltParams, isLastDOMElt) {
-			var widget   = this;
-			var cssPrefs = widget.wf.base_css_prefs;
-			var baseUrl  = widget.baseUrl;
+      var widget   = this;
+      var cssPrefs = widget.wf.base_css_prefs;
+      var baseUrl  = widget.baseUrl;
 
         // If there isn't any DOM, the element data is rendered as plain text!
       if (!newDOMElt) {
@@ -141,65 +141,65 @@ _Widget.prototype = {
     },
 
   _PRIV_buildDataElementContainer: function(dataObj, what, whatParams) {
-			var widget = this; // COMPRESSION
-			var rootElt     = '';
-			var leafElt     = '';
-			var eltDOMArray = _GLOB_isDefined(whatParams.how) ? whatParams.how : [];
-			var depth       = eltDOMArray.length;
+      var widget = this; // COMPRESSION
+      var rootElt     = '';
+      var leafElt     = '';
+      var eltDOMArray = _GLOB_isDefined(whatParams.how) ? whatParams.how : [];
+      var depth       = eltDOMArray.length;
 
-			/**
-			 * This code goes through the array of HTML element specs,
-			 * constructs one elements at a time, and nests each new element
-			 * within the previous element.
-			 */
-			for (var i = 0; i < depth; i++) {
+      /**
+       * This code goes through the array of HTML element specs,
+       * constructs one elements at a time, and nests each new element
+       * within the previous element.
+       */
+      for (var i = 0; i < depth; i++) {
         var isLast;
-				var params = eltDOMArray[i];
+        var params = eltDOMArray[i];
         var newElt;
         if (params.elt == 'dom_tree') {
-			     newElt = widget._PRIV_buildWidgetSectionDOM(params.root_elt, dataObj, params);
+           newElt = widget._PRIV_buildWidgetSectionDOM(params.root_elt, dataObj, params);
              // The data/inner-html for this new element comes from the children which have already been built!
              // So, nothing more to add to it anymore -- simply process href, srcs, etc.
-				   this._PRIV_processNewDOMElement(dataObj, '', [], newElt, params, false);
+           this._PRIV_processNewDOMElement(dataObj, '', [], newElt, params, false);
         }
         else {
-				  newElt = this._PRIV_createElement(params.elt, params.clazz, params.style);
+          newElt = this._PRIV_createElement(params.elt, params.clazz, params.style);
           isLast = (i == (depth-1));
-				  this._PRIV_processNewDOMElement(dataObj, what, whatParams, newElt, params, isLast);
+          this._PRIV_processNewDOMElement(dataObj, what, whatParams, newElt, params, isLast);
         }
 
-				if (!rootElt)
-					rootElt = newElt;
-				else
-					leafElt.appendChild(newElt);
+        if (!rootElt)
+          rootElt = newElt;
+        else
+          leafElt.appendChild(newElt);
 
-				leafElt = newElt;
-			}
+        leafElt = newElt;
+      }
 
-				/* No DOM specs provided -- so, run the dom element processor to generate a default element */
-			if (depth == 0)
-				rootElt = this._PRIV_processNewDOMElement(dataObj, what, whatParams, '', params, true);
+        /* No DOM specs provided -- so, run the dom element processor to generate a default element */
+      if (depth == 0)
+        rootElt = this._PRIV_processNewDOMElement(dataObj, what, whatParams, '', params, true);
 
-			return rootElt;
-		},
+      return rootElt;
+    },
 
-	_PRIV_addSeparator: function(container, sep) {
-			if (sep) {
-					// Process "\n" newline elements at the beginning and strip them off the separator
-				if (sep.substring(0,1) == '\n') {
-					container.appendChild(document.createElement('br'));
-					sep = sep.substring(1);
-				}
-				if (sep)
-					container.appendChild(document.createTextNode(sep));
-			}
-		},
+  _PRIV_addSeparator: function(container, sep) {
+      if (sep) {
+          // Process "\n" newline elements at the beginning and strip them off the separator
+        if (sep.substring(0,1) == '\n') {
+          container.appendChild(document.createElement('br'));
+          sep = sep.substring(1);
+        }
+        if (sep)
+          container.appendChild(document.createTextNode(sep));
+      }
+    },
 
-	_PRIV_addDataElement: function(dataObj, formatParams, containerElt) {
-			var widget = this; // COMPRESSION
+  _PRIV_addDataElement: function(dataObj, formatParams, containerElt) {
+      var widget = this; // COMPRESSION
 
         // Fetch the 'what' element
-			var elt = _GLOB_isDefined(formatParams.what) ? formatParams.what : '';
+      var elt = _GLOB_isDefined(formatParams.what) ? formatParams.what : '';
 
          // Check for presence of a condition
       if (_GLOB_isDefined(formatParams.if_true)) {
@@ -215,85 +215,85 @@ _Widget.prototype = {
           return;
       }
 
-				// Add the prefix separator!
-			if (formatParams.prefix)
-				widget._PRIV_addSeparator(containerElt, formatParams.prefix);
+        // Add the prefix separator!
+      if (formatParams.prefix)
+        widget._PRIV_addSeparator(containerElt, formatParams.prefix);
 
-				// Now process the DOM specs. of the 'what' element
-			var rootElt = widget._PRIV_buildDataElementContainer(dataObj, eltData, formatParams);
-			if (rootElt)
-				containerElt.appendChild(rootElt);
+        // Now process the DOM specs. of the 'what' element
+      var rootElt = widget._PRIV_buildDataElementContainer(dataObj, eltData, formatParams);
+      if (rootElt)
+        containerElt.appendChild(rootElt);
 
-				// Add the suffix separator!
-			if (formatParams.suffix)
-				widget._PRIV_addSeparator(containerElt, formatParams.suffix);
-		},
+        // Add the suffix separator!
+      if (formatParams.suffix)
+        widget._PRIV_addSeparator(containerElt, formatParams.suffix);
+    },
 
   _PRIV_buildWidgetSectionChildren: function(sectionData, childFormats, parentElt) {
       var widget = this;
-			_GLOB_iterateOverArray(childFormats, function(arrayElt) { widget._PRIV_addDataElement(sectionData, arrayElt, parentElt); });
+      _GLOB_iterateOverArray(childFormats, function(arrayElt) { widget._PRIV_addDataElement(sectionData, arrayElt, parentElt); });
     },
 
   _PRIV_buildWidgetSectionDOM: function(rootEltType, itemData, sectionFormat) {
-			var itemDIV = this._PRIV_createElement(rootEltType, sectionFormat.clazz, sectionFormat.style);
+      var itemDIV = this._PRIV_createElement(rootEltType, sectionFormat.clazz, sectionFormat.style);
       this._PRIV_buildWidgetSectionChildren(itemData, sectionFormat.dom_nodes, itemDIV);
-			return itemDIV;
-	  },
+      return itemDIV;
+    },
 
-		// This method builds a specific section of the widget
-	_PRIV_buildWidgetSection: function(sectionFormat) {
-			var secData = eval(sectionFormat.data);
+    // This method builds a specific section of the widget
+  _PRIV_buildWidgetSection: function(sectionFormat) {
+      var secData = eval(sectionFormat.data);
 
-			if (sectionFormat.loop) {
-					// Generic section div
-				var secDIV = this._PRIV_createElement('div', '', '');
+      if (sectionFormat.loop) {
+          // Generic section div
+        var secDIV = this._PRIV_createElement('div', '', '');
 
-					// Items within this section
-				var count = 0;
-				var numReqdItems = sectionFormat.num_items;
+          // Items within this section
+        var count = 0;
+        var numReqdItems = sectionFormat.num_items;
         var l = secData.length;
-				for (var i = 0; i < l; i++) {
-					if ((count == numReqdItems)) // We are done!
-						break;
+        for (var i = 0; i < l; i++) {
+          if ((count == numReqdItems)) // We are done!
+            break;
 
-						// Build the item (story, for example) and append it to the section div
-					secDIV.appendChild(this._PRIV_buildWidgetSectionDOM('div', secData[i], sectionFormat));
+            // Build the item (story, for example) and append it to the section div
+          secDIV.appendChild(this._PRIV_buildWidgetSectionDOM('div', secData[i], sectionFormat));
 
-					count++;
-				}
+          count++;
+        }
 
-				return secDIV;
-			}
-			else {
-					// Build the section (header / footer, for example)
-				return this._PRIV_buildWidgetSectionDOM('div', secData, sectionFormat);
-			}
-		},
+        return secDIV;
+      }
+      else {
+          // Build the section (header / footer, for example)
+        return this._PRIV_buildWidgetSectionDOM('div', secData, sectionFormat);
+      }
+    },
 
-		// Generate the root widget div
+    // Generate the root widget div
   _PRIV_generateWidgetDiv: function() {
-				// local vars. to ensure better code compression!
-			var widget = this;
-			var baseUrl = widget.baseUrl;
-			var widgetFormat = widget.wf;
-		  var cssPrefs = widgetFormat.base_css_prefs;
+        // local vars. to ensure better code compression!
+      var widget = this;
+      var baseUrl = widget.baseUrl;
+      var widgetFormat = widget.wf;
+      var cssPrefs = widgetFormat.base_css_prefs;
 
-				// Construct a top-level widget div
-			var widgetDIV = widget._PRIV_createElement('div', cssPrefs.clazz, cssPrefs.style);
+        // Construct a top-level widget div
+      var widgetDIV = widget._PRIV_createElement('div', cssPrefs.clazz, cssPrefs.style);
 
-				// Build all the widget sections
-			_GLOB_iterateOverArray(widgetFormat.sections, function(arrayElt) { widgetDIV.appendChild(widget._PRIV_buildWidgetSection(widgetFormat[arrayElt])); });
+        // Build all the widget sections
+      _GLOB_iterateOverArray(widgetFormat.sections, function(arrayElt) { widgetDIV.appendChild(widget._PRIV_buildWidgetSection(widgetFormat[arrayElt])); });
 
-				// Record the div
-			widget.rootDIV = widgetDIV;
+        // Record the div
+      widget.rootDIV = widgetDIV;
 
-			return widgetDIV;
-		},
+      return widgetDIV;
+    },
 
-		// Replace 'replNode' with a generated widget div
+    // Replace 'replNode' with a generated widget div
   installOver: function(replNode) { replNode.parentNode.replaceChild(this._PRIV_generateWidgetDiv(), replNode); },
 
-		// Replace the old widget DIV with a new generated widget
+    // Replace the old widget DIV with a new generated widget
   refresh: function() { this.installOver(this.rootDIV); },
 
   // ---------- These functions are helper functions and is not strictly needed in this file, but are commonly used in some of my widgets! ----------
