@@ -17,7 +17,7 @@ var widget_format = {
   stories : {
     data      : '_nr_stories',
     loop      : true,
-    num_items : 10,
+    num_items : 5,
     style     : 'margin:5px;padding:2px 5px;font-size:11px;',
     dom_nodes : [
       { what : '{$util.trimString($.title,100)}', how: [{ elt: 'a', url: '{$.url}', style:'text-decoration:none;font-size:12px;font-weight:bold;color:#66c'}] },

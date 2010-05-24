@@ -9,17 +9,17 @@ var widget_format = {
   cssPrefs : '',
   header : {
     data      : 'twit_data',
-    dom_nodes : [ { what : "{$[0].user.name}'s Updates", how: [{ elt: 'h1', style: 'margin: 5px; padding:5px'}] } ]
+    dom_nodes : [ { what : "{$[0].user.name}'s Updates", how: [{ elt: 'h1', style: 'font-size:16px;margin:5px;padding:5px'}] } ]
   },
   updates : {
     data      : 'twit_data',
     loop      : true,
     num_items : 5,
-    style     : 'margin:5px;padding:5px',
+    style     : 'margin:5px;padding:5px;font-size:12px;',
     dom_nodes : [ 
-       { what: '{$.text}',    how: [{elt: 'div', style: 'font-weight:bold'}] }, 
-       { what: 'Posted at: ', how: [{elt: 'span', style: 'font-weight:bold;color:#888'}] }, 
-       { what: '{$.created_at}' }
+       { what: '{$.text}',      how: [{elt: 'div', style: 'font-size:14px'}] }, 
+       { what: 'Posted at: ',   how: [{elt: 'span', style: 'color:#aaa'}] }, 
+       { what: '{$.created_at}', how: [{elt: 'span', style: 'color:#aaa'}] }
     ]
   }
 };
