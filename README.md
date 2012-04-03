@@ -14,7 +14,7 @@ letting me use that code as the basis for this FOSS project.
   this widget engine.  This code is pushed through Yahoo's JS compressor and my own
   custom compresser to generate the compact jsWidget.js code as follows:
 
-     java -jar PATH-TO-JAR/yuicompressor-2.3.5.jar jsWidget.ultracompressible.js | perl compress.js.pl > jsWidget.js
+    `java -jar PATH-TO-JAR/yuicompressor-2.3.5.jar jsWidget.ultracompressible.js | perl compress.js.pl > jsWidget.js`
 
   This compression technique is just legacy and how I have done it in the past -- this
   can be stripped out to use any other compression techique.
@@ -48,8 +48,7 @@ I am yet to write up a spec for this format, but till such time, some preliminar
   the widget formats -- so as to tightly control the rendering without being impacted by the styles
   of the site on which this is embedded) or via css class names (which are expected to be present
   on the page within which the widget is embedded).
-
-  digg.json is an example that uses css classes (and the css defns. for these classes are provided
+  [digg.json][formats/digg.json] is an example that uses css classes (and the css defns. for these classes are provided
   in jsw.demo.html).
 
 * For each section of the widget (which is specified by an array -- self-explanatory when you look
