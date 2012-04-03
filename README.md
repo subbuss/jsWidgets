@@ -48,7 +48,7 @@ I am yet to write up a spec for this format, but till such time, some preliminar
   the widget formats -- so as to tightly control the rendering without being impacted by the styles
   of the site on which this is embedded) or via css class names (which are expected to be present
   on the page within which the widget is embedded).
-  [digg.json][formats/digg.json] is an example that uses css classes (and the css defns. for these classes are provided
+  formats/digg.json is an example that uses css classes (and the css defns. for these classes are provided
   in jsw.demo.html).
 
 * For each section of the widget (which is specified by an array -- self-explanatory when you look
